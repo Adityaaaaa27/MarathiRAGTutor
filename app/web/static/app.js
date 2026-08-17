@@ -27,26 +27,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const sampleQuestionsByStandard = {
         "6": [
             { icon: "📖", q: "पाठ्यपुस्तकातील १ ते २० पर्यंतचे सर्व पाठ आणि कवितांची यादी द्या." },
+            { icon: "🔤", q: "Matheran baddal kay mahiti dili ahe?" },
+            { icon: "🔤", q: "chimanich gharte ya pathat Isha baddal kay sangitle ahe?" },
             { icon: "🌸", q: "'या भारतात बंधुभाव' या प्रार्थनेचा मुख्य संदेश काय आहे?" },
-            { icon: "🐦", q: "'चिमणीचं घरटं' या पाठाचा मुख्य सारांश काय आहे?" },
-            { icon: "🏞️", q: "'निसर्गरम्य माथेरान' या पाठात माथेरानचे वर्णन कसे केले आहे?" },
-            { icon: "🚀", q: "डॉ. ए. पी. जे. अब्दुल कलाम यांचे बालपण कसे होते?" },
             { icon: "🍱", q: "'आजोबांचा तीन पुड्यांचा डबा' या पाठातून काय शिकायला मिळते?" },
+            { icon: "🚀", q: "डॉ. ए. पी. जे. अब्दुल कलाम यांचे बालपण कसे होते?" },
         ],
         "7": [
             { icon: "📖", q: "सातवीच्या पाठ्यपुस्तकातील सर्व पाठ आणि कवितांची यादी द्या." },
+            { icon: "🔤", q: "shyamche bandhuprem ya pathacha saransh kay ahe?" },
             { icon: "💌", q: "'श्यामचे बंधुप्रेम' या पाठाचा सारांश काय आहे?" },
             { icon: "🌾", q: "'माझ्या अंगणात' या कवितेचा भावार्थ सांगा." },
             { icon: "📚", q: "'वाचनाचे वेड' या पाठातून आपल्याला काय शिकायला मिळते?" },
             { icon: "🌟", q: "पंडिता रामाबाई यांचे कार्य कोणते होते?" },
-            { icon: "😄", q: "'आजारी पडण्याचा प्रयोग' या पाठातील विनोद कसा आहे?" },
         ],
         "8": [
             { icon: "📖", q: "आठवीच्या पाठ्यपुस्तकातील सर्व पाठ आणि कवितांची यादी द्या." },
+            { icon: "🔤", q: "Bharat amucha desh ya geetatun kay sandesh milto?" },
             { icon: "🇮🇳", q: "'भारत अमुचा देश' या गीताचा मुख्य संदेश काय आहे?" },
             { icon: "🐦", q: "'चिव चिव चिमण्या' या पाठातून काय शिकायला मिळते?" },
             { icon: "🌌", q: "स्टीफन हॉकिंग यांच्या जीवनातून कोणती प्रेरणा मिळते?" },
-            { icon: "☀️", q: "'सावलीतून जा आणि सावलीतून ये' या पाठाचा सारांश काय आहे?" },
             { icon: "🏔️", q: "'ध्येयपूर्तीचा ध्यास' या पाठातून काय संदेश मिळतो?" },
         ],
     };
@@ -317,9 +317,18 @@ document.addEventListener("DOMContentLoaded", () => {
             parsedAnswer = window.marked.parse(data.answer);
         }
 
+        const transliterationHtml = (data.marathi_question && data.marathi_question !== data.question)
+            ? `<div class="transliteration-badge">
+                   <span class="badge-icon">🔤</span>
+                   <span class="badge-label">मराठी रूपांतरण:</span>
+                   <span class="badge-text">${escapeHtml(data.marathi_question)}</span>
+               </div>`
+            : "";
+
         msgDiv.innerHTML = `
             <div class="avatar">🎓</div>
             <div class="message-content">
+                ${transliterationHtml}
                 <div class="message-text">${parsedAnswer}</div>
             </div>
         `;

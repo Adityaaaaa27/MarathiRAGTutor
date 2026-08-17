@@ -99,15 +99,21 @@ class QueryService:
             mistral_service.initialize()
             llm_service = mistral_service
 
-        # 5. Prompt service
+        # 5. Transliteration service (for Romanized Marathi / English queries)
+        from app.preprocessing.transliteration_service import TransliterationService
+        transliteration_service = TransliterationService(settings=self._settings)
+        transliteration_service.initialize()
+
+        # 6. Prompt service
         prompt_service = PromptService()
 
-        # 6. RAG chain
+        # 7. RAG chain
         self._rag_chain = RAGChain(
             retriever_service=retriever_service,
             prompt_service=prompt_service,
             mistral_service=llm_service,
             chroma_service=chroma_service,
+            transliteration_service=transliteration_service,
         )
 
         self._initialized = True

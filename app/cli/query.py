@@ -86,6 +86,10 @@ def display_answer(result: QueryResult) -> None:
         result: The query result containing the answer.
     """
     console.print()
+    if result.marathi_question and result.marathi_question != result.question:
+        console.print(
+            f"[bold cyan]🔤 मराठी रूपांतरण:[/bold cyan] [bold white]{result.marathi_question}[/bold white]\n"
+        )
     console.print(
         Panel(
             Markdown(result.answer),

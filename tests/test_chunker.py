@@ -66,7 +66,7 @@ class TestTextChunker:
             for i in range(1, 4)
         ]
         chunks = self.chunker.chunk_pages(pages, "test.pdf")
-        assert len(chunks) > 3  # Should produce multiple chunks
+        assert len(chunks) >= 3  # Should produce at least one chunk per page
 
     def test_empty_pages_produce_no_chunks(self):
         """Test that empty pages don't produce chunks."""

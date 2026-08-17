@@ -53,6 +53,9 @@ class QueryResult(BaseModel):
     """
 
     question: str = Field(..., description="Original user question")
+    marathi_question: Optional[str] = Field(
+        default=None, description="Transliterated/translated Marathi question in Devanagari"
+    )
     answer: str = Field(default="", description="Generated answer")
     retrieved_chunks: list[RetrievedChunk] = Field(
         default_factory=list, description="Retrieved chunks with metadata"
@@ -154,11 +157,13 @@ class RAGChain:
         prompt_service: PromptService,
         mistral_service: MistralService,
         chroma_service: ChromaService,
+        transliteration_service: Optional[Any] = None,
     ) -> None:
         self._retriever_service = retriever_service
         self._prompt_service = prompt_service
         self._mistral_service = mistral_service
         self._chroma_service = chroma_service
+        self._transliteration_service = transliteration_service
 
     def _is_toc_query(self, query: str) -> bool:
         """Check if query is asking for Table of Contents, list of chapters/lessons/poems."""
@@ -185,21 +190,27 @@ class RAGChain:
         """Execute the full RAG pipeline for a question.
 
         Args:
-            question: User question in Marathi or English.
+            question: User question in Marathi, Romanized Marathi, or English.
             standard: Grade/standard (6, 7, 8, 9, 10 or 'all'/None).
             filters: Optional metadata filters for retrieval.
 
         Returns:
             ``QueryResult`` with answer, chunks, metadata, and scores.
         """
+        # Step 0: Transliterate / normalize Romanized Marathi or English input to Devanagari
+        marathi_q = question
+        if self._transliteration_service:
+            marathi_q = self._transliteration_service.transliterate_to_marathi(question)
+
         logger.info(
-            "RAG chain invoked: [bold]%s[/bold] (Standard: %s)",
-            question[:100],
+            "RAG chain invoked: [bold]%s[/bold] (Marathi: %s, Standard: %s)",
+            question[:80],
+            marathi_q[:80] if marathi_q != question else "same",
             str(standard or "all"),
             extra={"markup": True},
         )
 
-        cleaned_q = re.sub(r"[‘'“”\"’]", "", question)
+        cleaned_q = re.sub(r"[‘'“”\"’]", "", marathi_q)
         search_results = []
 
         # Parse standard filter
@@ -307,7 +318,7 @@ class RAGChain:
         logger.debug("Invoking LLM with %d context chunks", len(documents))
         answer = chain.invoke({
             "context": context_str,
-            "question": question,
+            "question": marathi_q if marathi_q else question,
         })
 
         # Step 5: Collect unique page numbers
@@ -325,6 +336,7 @@ class RAGChain:
 
         result = QueryResult(
             question=question,
+            marathi_question=marathi_q if marathi_q != question else None,
             answer=answer,
             retrieved_chunks=retrieved_chunks,
             page_numbers=page_numbers,

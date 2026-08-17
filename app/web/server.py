@@ -74,6 +74,7 @@ class ChunkResponse(BaseModel):
 class AskResponse(BaseModel):
     """Response schema for question answering."""
     question: str
+    marathi_question: Optional[str] = None
     answer: str
     page_numbers: list[int]
     source: str
@@ -145,6 +146,7 @@ def ask_question(req: AskRequest):
 
         return AskResponse(
             question=res.question,
+            marathi_question=res.marathi_question,
             answer=res.answer,
             page_numbers=res.page_numbers,
             source=res.source,

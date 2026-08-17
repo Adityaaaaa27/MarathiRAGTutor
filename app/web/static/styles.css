@@ -666,6 +666,39 @@ body {
     background: #475569;
 }
 
+/* Transliteration Badge */
+.transliteration-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15));
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.transliteration-badge .badge-icon {
+    font-size: 0.95rem;
+}
+
+.transliteration-badge .badge-label {
+    color: #a78bfa;
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.transliteration-badge .badge-text {
+    color: #f1f5f9;
+    font-family: var(--font-marathi);
+    font-weight: 500;
+}
+
 /* Responsive adjustments */
 @media (max-width: 868px) {
     .app-container {
