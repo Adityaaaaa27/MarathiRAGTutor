@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>मराठी RAG Tutor — महाराष्ट्र राज्य मंडळ (इयत्ता ६ वी & ७ वी बालभारती)</title>
+    <!-- Google Fonts: Noto Sans Devanagari & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Info Panel -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">📚</div>
+                <div class="brand-text">
+                    <h1>मराठी RAG Tutor</h1>
+                    <span class="badge" id="sidebar-badge">इयत्ता ६ वी, ७ वी & ८ वी</span>
+                </div>
+            </div>
+
+            <!-- Standard Selector in Sidebar -->
+            <div class="sidebar-section">
+                <h3>🎯 इयत्ता निवडा (Select Standard)</h3>
+                <div class="standard-dropdown-wrapper">
+                    <select id="standard-select" class="standard-dropdown">
+                        <option value="6" selected>📘 इयत्ता ६ वी — बालभारती</option>
+                        <option value="7">📗 इयत्ता ७ वी — बालभारती</option>
+                        <option value="8">📙 इयत्ता ८ वी — बालभारती</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>📖 निवडलेले पाठ्यपुस्तक</h3>
+                <div class="info-card">
+                    <div class="info-item">
+                        <span class="label">सध्याची इयत्ता:</span>
+                        <span class="value" id="info-standard-name">इयत्ता ६ वी (बालभारती)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">विषय:</span>
+                        <span class="value">मराठी (प्रथम भाषा)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">इंडेक्स संग्रह:</span>
+                        <span class="value" id="info-chunk-count">ChromaDB Multi-Book</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">मॉडेल:</span>
+                        <span class="value">Mistral AI + Vision OCR</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>💡 नमुना प्रश्न (क्लिक करा)</h3>
+                <div id="sample-questions-container" class="sample-questions">
+                    <!-- Dynamic Sample Questions injected by app.js -->
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span id="status-text">सिस्टम सज्ज (Connected)</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="main-content">
+            <header class="chat-header">
+                <div class="header-left">
+                    <h2>पाठ्यपुस्तक आधारित संवाद (Textbook Q&A)</h2>
+                    <p class="subtitle" id="chat-subtitle">महाराष्ट्र राज्य मंडळाच्या मराठी पाठ्यपुस्तकातील कोणत्याही पाठाविषयी प्रश्न विचारा.</p>
+                </div>
+                <div class="header-right">
+                    <button id="clear-btn" class="icon-btn" title="नवीन संवाद सुरू करा">
+                        🗑️ नवीन संवाद
+                    </button>
+                </div>
+            </header>
+
+            <!-- Standard Selector Pills Bar -->
+            <nav class="standard-pills-bar" aria-label="इयत्ता निवडा">
+                <button class="pill-btn active" data-std="6">
+                    <span class="pill-icon">📘</span> इयत्ता ६ वी (बालभारती)
+                </button>
+                <button class="pill-btn" data-std="7">
+                    <span class="pill-icon">📗</span> इयत्ता ७ वी (बालभारती)
+                </button>
+                <button class="pill-btn" data-std="8">
+                    <span class="pill-icon">📙</span> इयत्ता ८ वी (बालभारती)
+                </button>
+            </nav>
+
+            <div id="chat-messages" class="chat-messages">
+                <!-- Welcome Banner -->
+                <div class="welcome-card" id="welcome-card">
+                    <div class="welcome-icon">🎓</div>
+                    <h2 id="welcome-title">नमस्कार! मी तुमचा मराठी शिक्षक (RAG Tutor) आहे.</h2>
+                    <p id="welcome-desc">मी तुमच्या <strong>इयत्ता ६ वी बालभारती मराठी पाठ्यपुस्तकातील</strong> अधिकृत माहितीच्या आधारे थेट आणि सोप्या भाषेत उत्तरे देतो.</p>
+                    <div class="welcome-features">
+                        <span class="feature-tag">✨ Vision OCR अचूकता</span>
+                        <span class="feature-tag">🎯 इयत्ता-निहाय शोध</span>
+                        <span class="feature-tag">🛡️ शुध्द मराठी भाषा</span>
+                    </div>
+                    <p class="welcome-tip">👉 वरील इयत्तेवर क्लिक करा किंवा खालील नमुना प्रश्नांवरून सुरुवात करा!</p>
+                </div>
+            </div>
+
+            <!-- Input Bar -->
+            <div class="input-container">
+                <form id="chat-form" class="chat-form">
+                    <textarea 
+                        id="question-input" 
+                        placeholder="तुमचा प्रश्न मराठीत येथे विचारा... (उदा. पाठाचा सारांश काय? / कवितेचा भावार्थ सांगा)" 
+                        rows="1"
+                        required
+                    ></textarea>
+                    <button type="submit" id="send-btn" class="send-btn" title="प्रश्न पाठवा">
+                        <span class="send-icon">➤</span>
+                        <span class="loading-spinner"></span>
+                    </button>
+                </form>
+                <div class="input-footer">
+                    <span>💡 <strong>Enter</strong> दाबून पाठवा • <strong>Shift+Enter</strong> ने नवीन ओळ • पाठ्यपुस्तक: <strong id="active-std-label">इयत्ता ६ वी (बालभारती)</strong></span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Markdown Parser Library (marked) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>
