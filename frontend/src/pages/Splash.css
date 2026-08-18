@@ -1,0 +1,147 @@
+.splash-container {
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+}
+
+.splash-header {
+  padding-bottom: 40px;
+}
+
+.logo-badge {
+  background: var(--text-dark);
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.splash-main {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  margin-top: 20px;
+}
+
+.splash-content {
+  flex: 1;
+  max-width: 600px;
+}
+
+.splash-title {
+  font-size: 56px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.marathi-title {
+  font-size: 42px;
+  color: var(--text-light);
+}
+
+.splash-subtitle {
+  font-size: 20px;
+  color: var(--text-light);
+  margin-bottom: 40px;
+  line-height: 1.5;
+}
+
+.mt-6 {
+  margin-top: 24px;
+}
+
+.illustrations-container {
+  position: relative;
+  height: 500px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Stamp styles */
+.stamp {
+  position: absolute;
+  background: white;
+  padding: 10px;
+  border: 2px solid var(--text-dark);
+  border-radius: 8px;
+  /* Stamp zig-zag edge simulation */
+  box-shadow: 
+    -4px -4px 0 0 white,
+    -4px 4px 0 0 white,
+    4px -4px 0 0 white,
+    4px 4px 0 0 white;
+  border-image: repeating-linear-gradient(
+    45deg,
+    var(--text-dark),
+    var(--text-dark) 4px,
+    transparent 4px,
+    transparent 8px
+  ) 10;
+}
+
+.stamp-inner {
+  width: 80px;
+  height: 80px;
+  border: 2px solid var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fdfdfd;
+  color: var(--text-dark);
+  border-radius: 4px;
+}
+
+.stamp-inner.dark {
+  background: var(--text-dark);
+  color: white;
+}
+
+.stamp-inner.landscape {
+  width: 120px;
+  height: 60px;
+  background: #E8F5E9; /* light green */
+  color: #2E7D32;
+}
+
+.record {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid white;
+  border-top-color: transparent;
+  transform: rotate(45deg);
+}
+
+.stamp-1 {
+  top: 10%;
+  left: 10%;
+  transform: rotate(-10deg);
+}
+
+.stamp-2 {
+  top: 5%;
+  right: 15%;
+  transform: rotate(15deg);
+}
+
+.stamp-3 {
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%) rotate(-5deg);
+}
+
+.splash-footer {
+  padding-bottom: 20px;
+  margin-top: auto;
+}

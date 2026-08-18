@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500&display=swap');
+
+:root {
+  --primary-yellow: #FFD500;
+  --bg-cream: #FDFBF7;
+  --text-dark: #1E1E1E;
+  --text-light: #7A7A7A;
+  --card-pink: #F4C1E1;
+  --card-green: #4ADE80;
+  --chat-bg: #121212;
+  --chat-bubble-user: #333333;
+  --chat-bubble-bot: transparent;
+  
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background-color: var(--bg-cream);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-cream);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Grid Background Utility */
+.grid-bg {
+  background-image: 
+    linear-gradient(to right, #E0DED8 1px, transparent 1px),
+    linear-gradient(to bottom, #E0DED8 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: center top;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+button {
+  font-family: var(--font-heading);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Common UI Elements */
+.pill-button {
+  background: var(--text-dark);
+  color: white;
+  border-radius: 40px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-badge {
+  background: var(--text-dark);
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.primary-btn {
+  background: var(--primary-yellow);
+  color: var(--text-dark);
+  border-radius: 40px;
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  width: fit-content;
+  display: inline-flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(255, 213, 0, 0.3);
+}
+
+.icon-circle {
+  background: var(--text-dark);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Layout Utilities */
+.page-container {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
