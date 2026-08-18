@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marathi RAG Tutor — Project Journey & Architecture</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 16mm 14mm 16mm 14mm;
+        }
+        
+        body {
+            font-family: 'Poppins', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #1a1a2e;
+            background: #ffffff;
+            line-height: 1.6;
+            font-size: 10pt;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+            color: #0f172a;
+            font-weight: 700;
+            page-break-after: avoid;
+        }
+
+        h1 {
+            font-size: 20pt;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 8px;
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: #1e3a8a;
+        }
+
+        h2 {
+            font-size: 13.5pt;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 6px;
+            margin-top: 22px;
+            margin-bottom: 10px;
+            color: #1e40af;
+        }
+
+        h3 {
+            font-size: 11pt;
+            margin-top: 16px;
+            margin-bottom: 6px;
+            color: #0f172a;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0 18px 0;
+            font-size: 9pt;
+            page-break-inside: avoid;
+        }
+
+        th, td {
+            padding: 9px 12px;
+            border: 1px solid #cbd5e1;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+            border-bottom: 2px solid #94a3b8;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f8fafc;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8.8pt;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #0284c7;
+            border: 1px solid #e2e8f0;
+        }
+
+        pre {
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 14px 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 8.5pt;
+            line-height: 1.45;
+            margin: 12px 0 16px 0;
+            page-break-inside: avoid;
+        }
+
+        pre code {
+            background: transparent;
+            color: #f8fafc;
+            padding: 0;
+            border: none;
+        }
+
+        blockquote {
+            margin: 12px 0;
+            padding: 10px 16px;
+            background: #f0f9ff;
+            border-left: 4px solid #0284c7;
+            color: #0369a1;
+            border-radius: 0 6px 6px 0;
+        }
+
+        ul, ol {
+            margin-top: 0;
+            margin-bottom: 12px;
+            padding-left: 22px;
+        }
+
+        li {
+            margin-bottom: 4px;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>📘 Marathi RAG Tutor — Complete Project Journey, Architecture &amp; Technical Deep-Dive</h1>
+<hr />
+<h2>🌟 1. Executive Summary &amp; Core Mission</h2>
+<h3>The Problem We Set Out to Solve</h3>
+<p>In Maharashtra, millions of school students from Standards 6, 7, and 8 study their mother tongue using the state board <strong>Balbharti (बालभारती)</strong> curriculum. When studying at home or preparing for exams, students and parents face real challenges:</p>
+<ol>
+<li><strong>Lack of Instant, Authentic Doubt-Solving</strong>: Students often have questions about specific poems (<em>कविता</em>), lessons (<em>पाठ</em>), word meanings (<em>शब्दार्थ</em>), or author backgrounds.</li>
+<li><strong>Generic LLM Hallucinations</strong>: Standard AI models (like generic ChatGPT) pull information from across the internet, mix up different state curriculums, invent moral lessons that are not in the book, or use overly formal/Sanskritized Marathi that middle-school students cannot comprehend.</li>
+<li><strong>The &quot;Marathlish&quot; Reality</strong>: Real school students rarely type in pure Devanagari script. They type phonetically using English keyboards (e.g., <em>&quot;mla ya pathachi summary pahije&quot;</em> or <em>&quot;Matheran baddal kay sangitle ahe?&quot;</em>). Standard search and vector systems fail completely when matching Roman English queries against Devanagari textbook text.</li>
+</ol>
+<h3>Our Solution</h3>
+<p>We engineered a <strong>Production-Quality Retrieval-Augmented Generation (RAG) AI Tutor System</strong> tailored specifically for the Maharashtra State Board Balbharti syllabus.</p>
+<ul>
+<li><strong>100% Grounded in Textbook</strong>: Strict zero-hallucination policy. The AI answers solely based on verified textbook pages and provides exact page references.</li>
+<li><strong>Multilingual Query Understanding</strong>: Students can ask in Devanagari Marathi, English, or phonetically Romanized Marathi (&quot;Marathlish&quot;).</li>
+<li><strong>Multi-Standard Support</strong>: Partitioned knowledge bases for Standard 6, Standard 7, and Standard 8.</li>
+</ul>
+<hr />
+<h2>🧭 2. Architectural Blueprint</h2>
+<p>Below is the end-to-end pipeline showing how a student's query flows through the entire system:</p>
+<pre><code>+-----------------------------------------------------------------------------------+
+|                                  USER / STUDENT                                   |
+|       Types: &quot;chimanich gharte ya pathat Isha baddal kay sangitle ahe?&quot;           |
++-----------------------------------------+-----------------------------------------+
+                                          |
+                                          v
++-----------------------------------------------------------------------------------+
+|                                FASTAPI WEB SERVER                                 |
+|                         (Endpoint: POST /api/ask)                                 |
++-----------------------------------------+-----------------------------------------+
+                                          |
+                                          v
++-----------------------------------------------------------------------------------+
+|                          TRANSLITERATION SERVICE                                  |
+|   - Detects script &amp; phonetics                                                    |
+|   - Converts: &quot;चिमाणीचे घरटे या पाठात ईशाबद्दल काय सांगितले आहे?&quot;              |
++-----------------------------------------+-----------------------------------------+
+                                          |
+                                          v
++-----------------------------------------------------------------------------------+
+|                          EMBEDDING SERVICE (bge-m3)                               |
+|   - Generates 1024-dimensional dense semantic vector for the query                |
++-----------------------------------------+-----------------------------------------+
+                                          |
+                                          v
++-----------------------------------------------------------------------------------+
+|                        CHROMADB VECTOR DATABASE                                   |
+|   - Filters by metadata (e.g., standard: &quot;6&quot;)                                     |
+|   - Cosine similarity search retrieves Top-K most relevant textbook chunks        |
++-----------------------------------------+-----------------------------------------+
+                                          |
+                                          v
++-----------------------------------------------------------------------------------+
+|                            RAG PROMPT SERVICE                                     |
+|   - Injects retrieved textbook context + Marathi pedagogical teacher persona      |
+|   - Enforces strict anti-hallucination and grade-appropriate language rules       |
++-----------------------------------------+-----------------------------------------+
+                                          |
+                                          v
++-----------------------------------------------------------------------------------+
+|                            MISTRAL AI (LLM)                                       |
+|   - Generates structured, helpful, warm Marathi answer with page citations        |
++-----------------------------------------+-----------------------------------------+
+                                          |
+                                          v
++-----------------------------------------------------------------------------------+
+|                              MODERN FRONTEND UI                                   |
+|   - Displays clean chat bubble with transliteration badge &amp; formatted Markdown    |
++-----------------------------------------------------------------------------------+
+</code></pre>
+<hr />
+<h2>🛠️ 3. Why We Chose This Specific Tech Stack</h2>
+<p>Every technology in this project was selected after evaluating performance on <strong>Indic language NLP (specifically Marathi/Devanagari)</strong>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Component</th>
+<th style="text-align:left">Technology</th>
+<th style="text-align:left">Why Chosen Over Alternatives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Language</strong></td>
+<td style="text-align:left"><strong>Python 3.10+</strong></td>
+<td style="text-align:left">Industry standard for AI, LangChain, PyTorch, and NLP libraries.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LLM Engine</strong></td>
+<td style="text-align:left"><strong>Mistral AI (<code>mistral-large-latest</code>)</strong></td>
+<td style="text-align:left">Superior multilingual reasoning, native support for Indic tokenization without heavy character inflation, high fidelity in following system constraints.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Embeddings</strong></td>
+<td style="text-align:left"><strong>BAAI/bge-m3</strong></td>
+<td style="text-align:left">Leading 1024-dim dense multilingual embedding model with 8192-token context window. Outperforms older English-centric models like OpenAI <code>text-embedding-ada-002</code> on Devanagari semantic matching.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Vector DB</strong></td>
+<td style="text-align:left"><strong>ChromaDB (Persistent)</strong></td>
+<td style="text-align:left">Embeddable, zero-cloud dependency, blazing fast local cosine search, native support for metadata filtering (<code>where={&quot;standard&quot;: &quot;6&quot;}</code>).</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>PDF Ingestion</strong></td>
+<td style="text-align:left"><strong>PyMuPDF + Vision OCR</strong></td>
+<td style="text-align:left">PyMuPDF extracts raw text at high speed. For scanned/complex layout pages, Vision OCR extracts clean Unicode without breaking conjunct letters (<em>जोडाक्षरे</em>).</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Pipeline Framework</strong></td>
+<td style="text-align:left"><strong>LangChain (LCEL)</strong></td>
+<td style="text-align:left">Declarative, modular LangChain Expression Language allowing composable, testable, and maintainable pipelines.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Backend API</strong></td>
+<td style="text-align:left"><strong>FastAPI + Uvicorn</strong></td>
+<td style="text-align:left">Asynchronous, lightning-fast request handling with native Pydantic type validation and automatic OpenAPI docs.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Frontend UI</strong></td>
+<td style="text-align:left"><strong>Vanilla HTML5, CSS3, JS</strong></td>
+<td style="text-align:left">Zero heavyweight dependencies (no React/Node build steps), instant load times, full aesthetic control (inspired by modern minimalist desktop apps).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>🧗 4. The Journey: How We Started &amp; Difficulties Faced</h2>
+<p>Building an Indic language RAG system is drastically different from building standard English RAG. Here is the true story of how we built this system step-by-step and the challenges we conquered:</p>
+<hr />
+<h3>Challenge 1: The Marathi PDF Extraction Problem (Broken Matras &amp; Ligatures)</h3>
+<ul>
+<li><strong>What Happened</strong>: When extracting text directly from official Balbharti PDFs using standard tools, complex Marathi words broke into gibberish. For example, letters like <code>क्ष</code>, <code>ज्ञ</code>, <code>त्र</code>, and vowel signs (<em>कान, मात्रा, वेलांटी</em>) were extracted as disconnected Unicode tokens or incorrect ASCII codes.</li>
+<li><strong>How We Solved It</strong>:
+<ol>
+<li>Implemented <strong>Unicode Normalization (NFC)</strong> in <code>TextCleaner</code> to fuse decomposed Unicode characters back into clean Devanagari ligatures.</li>
+<li>Built a hybrid extraction system: standard text extraction for clean text streams and high-accuracy Vision OCR for scanned/complex pages.</li>
+<li>Filtered out repetitive page headers (<em>&quot;इयत्ता सहावी&quot;</em>, <em>&quot;मराठी बालभारती&quot;</em>), page numbers (<em>&quot;पृष्ठ १२&quot;</em>), and publisher notices.</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h3>Challenge 2: The Devanagari Chunking Dilemma</h3>
+<ul>
+<li><strong>What Happened</strong>: Standard English text splitters split text on <code>\n\n</code>, <code>.</code>, or fixed character counts. In Marathi:
+<ul>
+<li>Sentences end with standard full stops <code>.</code> or the traditional Danda <code>।</code>.</li>
+<li>Splitting mid-word or mid-compound-character corrupted the semantic meaning of chunks.</li>
+</ul>
+</li>
+<li><strong>How We Solved It</strong>:
+<ul>
+<li>Engineered a Marathi-aware <code>RecursiveCharacterTextSplitter</code> configured with Indic punctuation separators: <code>[&quot;\n\n&quot;, &quot;\n&quot;, &quot;।&quot;, &quot;!&quot;, &quot;?&quot;, &quot;.&quot;, &quot; &quot;, &quot;&quot;]</code>.</li>
+<li>Tuned chunk size to <strong>400 characters with 80-character overlap</strong>, which fits typical Marathi story paragraphs and poetry stanzas perfectly.</li>
+<li>Attached rich metadata to every chunk: <code>standard</code>, <code>chapter_name</code>, <code>page_number</code>, <code>chunk_id</code>.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3>Challenge 3: The &quot;Marathlish&quot; Query Barrier</h3>
+<ul>
+<li><strong>What Happened</strong>: Testing revealed that school students almost never type in Devanagari script on desktop or mobile keyboards. They type:
+<blockquote>
+<p><em>&quot;Matheran baddal kay mahiti dili ahe?&quot;</em> (Romanized Marathi)<br />
+<em>&quot;iska matlab kya hai marathi mein&quot;</em> (Hindi-Marathi mix)<br />
+<em>&quot;lesson 3 summary pahije&quot;</em> (English-Marathi mix)<br />
+When these queries were passed directly to ChromaDB, cosine similarity with Devanagari text was near zero, causing retrieval to fail completely.</p>
+</blockquote>
+</li>
+<li><strong>How We Solved It</strong>:
+<ul>
+<li>Developed a specialized <strong><code>TransliterationService</code></strong>.</li>
+<li>Engineered a few-shot system prompt tailored specifically for Maharashtra State Board student vocabulary.</li>
+<li>Automatically translates/transliterates mixed phonetic queries into clean, standard Balbharti Devanagari before embedding and retrieval.</li>
+<li>Returns the transliterated query to the frontend as an educational badge so students can see the correct Marathi spelling.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3>Challenge 4: Anti-Hallucination &amp; Teacher Tone Calibration</h3>
+<ul>
+<li><strong>What Happened</strong>: Default LLM responses were either too technical (explaining grammatical terms from university linguistics) or hallucinating facts that were not in the Balbharti textbook.</li>
+<li><strong>How We Solved It</strong>:
+<ul>
+<li>Crafted an authoritative system prompt in <code>app/prompts/rag_prompt.py</code>:
+<ol>
+<li><strong>Strict Context Adherence</strong>: Must only answer using the provided textbook snippets.</li>
+<li><strong>Graceful Fallback</strong>: If information is missing, respond honestly: <em>&quot;या पाठ्यपुस्तकात याबद्दल माहिती उपलब्ध नाही.&quot;</em></li>
+<li><strong>Pedagogical Persona</strong>: Friendly, encouraging school teacher tone suited for 11-14 year olds.</li>
+<li><strong>Source Transparency</strong>: Always cite page numbers from the textbook.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3>Challenge 5: Multi-Standard Isolation</h3>
+<ul>
+<li><strong>What Happened</strong>: When a student selected Standard 7 and asked about a lesson, if Standard 6 had a similarly named topic, results from Standard 6 were leaking into the answer.</li>
+<li><strong>How We Solved It</strong>:
+<ul>
+<li>Implemented metadata filtering in <code>ChromaService</code> and <code>RetrieverService</code>:<pre><code class="language-python">retriever = vectorstore.as_retriever(
+    search_kwargs={
+        &quot;k&quot;: 5,
+        &quot;filter&quot;: {&quot;standard&quot;: selected_standard}
+    }
+)
+</code></pre>
+</li>
+<li>Partitioned ingestion so every textbook chunk is strictly tagged with its respective grade (<code>6</code>, <code>7</code>, or <code>8</code>).</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3>Challenge 6: UI/UX Transformation &amp; Live Performance</h3>
+<ul>
+<li><strong>What Happened</strong>: The initial prototype was a terminal CLI. Moving to a web interface required high responsiveness, standard selection pills, error-resilient client logic, and an interface suited for students.</li>
+<li><strong>How We Solved It</strong>:
+<ul>
+<li>Built a desktop interface with a cream grid background and a dark chat container.</li>
+<li>Included a prominent Standard selector (इयत्ता ६ वी, ७ वी, ८ वी).</li>
+<li>Integrated dynamic status indicators, responsive mobile/desktop breakpoints, and cache-busting on static assets.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2>📂 5. Directory Structure &amp; Component Responsibilities</h2>
+<pre><code>marathi-rag/
+│
+├── app/
+│   ├── cli/
+│   │   ├── ingest.py            # CLI command to index textbook PDFs
+│   │   └── query.py             # CLI interactive terminal query tool
+│   │
+│   ├── config/
+│   │   ├── constants.py         # App-wide string constants and defaults
+│   │   └── settings.py          # Pydantic environment configuration (.env)
+│   │
+│   ├── ingestion/
+│   │   ├── pdf_loader.py        # PyMuPDF fast text extractor
+│   │   └── pdf_loader_ocr.py    # Vision OCR extractor for scanned pages
+│   │
+│   ├── preprocessing/
+│   │   ├── cleaner.py           # Unicode normalizer &amp; noise cleaner
+│   │   ├── chunker.py           # Marathi-aware text chunker
+│   │   └── transliteration_service.py # Marathlish -&gt; Devanagari converter
+│   │
+│   ├── embeddings/
+│   │   └── embedding_service.py # BAAI/bge-m3 embedding manager
+│   │
+│   ├── vectorstore/
+│   │   └── chroma_service.py    # ChromaDB persistent vector repository
+│   │
+│   ├── retrieval/
+│   │   └── retriever.py         # Standard-filtered similarity retriever
+│   │
+│   ├── llm/
+│   │   └── mistral_service.py   # Mistral AI API integration
+│   │
+│   ├── prompts/
+│   │   └── rag_prompt.py        # Pedagogical Marathi RAG prompt template
+│   │
+│   ├── chains/
+│   │   └── rag_chain.py         # LCEL pipeline linking retriever -&gt; prompt -&gt; LLM
+│   │
+│   ├── services/
+│   │   ├── ingest_service.py    # Ingestion orchestration coordinator
+│   │   └── query_service.py     # Query execution coordinator
+│   │
+│   ├── web/
+│   │   ├── server.py            # FastAPI web server and REST routes
+│   │   └── static/              # Web assets (index.html, styles.css, app.js)
+│   │
+│   └── utils/
+│       ├── helpers.py           # Helper utilities and timing decorators
+│       └── logger.py            # Centralized logging setup
+│
+├── chroma/                      # ChromaDB SQLite + Parquet vector index
+├── data/                        # Raw textbook PDF files (Std 6, 7, 8)
+├── tests/                       # Unit and integration test suite
+├── requirements.txt             # Pinned project dependencies
+└── README.md                    # Quickstart repository documentation
+</code></pre>
+<hr />
+<h2>⚡ 6. How to Run the Entire Project</h2>
+<h3>Step 1: Clone &amp; Setup Virtual Environment</h3>
+<pre><code class="language-bash">cd marathi-rag
+python -m venv venv
+venv\Scripts\activate       # On Windows
+# source venv/bin/activate  # On Linux / Mac
+pip install -r requirements.txt
+</code></pre>
+<h3>Step 2: Configure Environment Variables</h3>
+<p>Create a <code>.env</code> file in the root directory:</p>
+<pre><code class="language-env">MISTRAL_API_KEY=your_mistral_api_key_here
+MISTRAL_MODEL_NAME=mistral-large-latest
+EMBEDDING_MODEL_NAME=BAAI/bge-m3
+CHROMA_PERSIST_DIR=chroma
+CHUNK_SIZE=400
+CHUNK_OVERLAP=80
+RETRIEVER_TOP_K=5
+</code></pre>
+<h3>Step 3: Ingest the Textbooks (One-time step)</h3>
+<p>Place textbook PDFs in <code>data/</code> and run:</p>
+<pre><code class="language-bash">python -m app.cli.ingest
+</code></pre>
+<h3>Step 4: Launch the Web Application</h3>
+<pre><code class="language-bash">python -m app.cli.web
+</code></pre>
+<p>Open your browser and navigate to <strong><code>http://localhost:8000/</code></strong>.</p>
+<hr />
+<h2>🔮 7. Future Horizons &amp; Next Phases</h2>
+<ol>
+<li><strong>Audio / Speech Interface</strong>: Voice-in, Voice-out in Marathi so young students can speak directly to the AI tutor without typing.</li>
+<li><strong>Automated Quiz &amp; Flashcard Generation</strong>: Teacher tool to generate question banks, fill-in-the-blanks, and grammar quizzes directly from textbook chapters.</li>
+<li><strong>Conversational Memory</strong>: Allowing follow-up context in multi-turn dialogues (<em>&quot;त्यानंतर काय झाले?&quot;</em>).</li>
+<li><strong>Expansion to Standards 9 &amp; 10</strong>: Indexing Kumarbharti textbooks for board exam preparation.</li>
+</ol>
+
+</body>
+</html>
