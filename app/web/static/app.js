@@ -26,28 +26,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // Standard-specific sample questions
     const sampleQuestionsByStandard = {
         "6": [
-            { icon: "📖", q: "पाठ्यपुस्तकातील १ ते २० पर्यंतचे सर्व पाठ आणि कवितांची यादी द्या." },
-            { icon: "🔤", q: "Matheran baddal kay mahiti dili ahe?" },
-            { icon: "🔤", q: "chimanich gharte ya pathat Isha baddal kay sangitle ahe?" },
-            { icon: "🌸", q: "'या भारतात बंधुभाव' या प्रार्थनेचा मुख्य संदेश काय आहे?" },
-            { icon: "🍱", q: "'आजोबांचा तीन पुड्यांचा डबा' या पाठातून काय शिकायला मिळते?" },
-            { icon: "🚀", q: "डॉ. ए. पी. जे. अब्दुल कलाम यांचे बालपण कसे होते?" },
+            { icon: "", q: "पाठ्यपुस्तकातील १ ते २० पर्यंतचे सर्व पाठ आणि कवितांची यादी द्या." },
+            { icon: "", q: "Matheran baddal kay mahiti dili ahe?" },
+            { icon: "", q: "chimanich gharte ya pathat Isha baddal kay sangitle ahe?" },
+            { icon: "", q: "'या भारतात बंधुभाव' या प्रार्थनेचा मुख्य संदेश काय आहे?" },
+            { icon: "", q: "'आजोबांचा तीन पुड्यांचा डबा' या पाठातून काय शिकायला मिळते?" },
+            { icon: "", q: "डॉ. ए. पी. जे. अब्दुल कलाम यांचे बालपण कसे होते?" },
         ],
         "7": [
-            { icon: "📖", q: "सातवीच्या पाठ्यपुस्तकातील सर्व पाठ आणि कवितांची यादी द्या." },
-            { icon: "🔤", q: "shyamche bandhuprem ya pathacha saransh kay ahe?" },
-            { icon: "💌", q: "'श्यामचे बंधुप्रेम' या पाठाचा सारांश काय आहे?" },
-            { icon: "🌾", q: "'माझ्या अंगणात' या कवितेचा भावार्थ सांगा." },
-            { icon: "📚", q: "'वाचनाचे वेड' या पाठातून आपल्याला काय शिकायला मिळते?" },
-            { icon: "🌟", q: "पंडिता रामाबाई यांचे कार्य कोणते होते?" },
+            { icon: "", q: "सातवीच्या पाठ्यपुस्तकातील सर्व पाठ आणि कवितांची यादी द्या." },
+            { icon: "", q: "shyamche bandhuprem ya pathacha saransh kay ahe?" },
+            { icon: "", q: "'श्यामचे बंधुप्रेम' या पाठाचा सारांश काय आहे?" },
+            { icon: "", q: "'माझ्या अंगणात' या कवितेचा भावार्थ सांगा." },
+            { icon: "", q: "'वाचनाचे वेड' या पाठातून आपल्याला काय शिकायला मिळते?" },
+            { icon: "", q: "पंडिता रामाबाई यांचे कार्य कोणते होते?" },
         ],
         "8": [
-            { icon: "📖", q: "आठवीच्या पाठ्यपुस्तकातील सर्व पाठ आणि कवितांची यादी द्या." },
-            { icon: "🔤", q: "Bharat amucha desh ya geetatun kay sandesh milto?" },
-            { icon: "🇮🇳", q: "'भारत अमुचा देश' या गीताचा मुख्य संदेश काय आहे?" },
-            { icon: "🐦", q: "'चिव चिव चिमण्या' या पाठातून काय शिकायला मिळते?" },
-            { icon: "🌌", q: "स्टीफन हॉकिंग यांच्या जीवनातून कोणती प्रेरणा मिळते?" },
-            { icon: "🏔️", q: "'ध्येयपूर्तीचा ध्यास' या पाठातून काय संदेश मिळतो?" },
+            { icon: "", q: "आठवीच्या पाठ्यपुस्तकातील सर्व पाठ आणि कवितांची यादी द्या." },
+            { icon: "", q: "Bharat amucha desh ya geetatun kay sandesh milto?" },
+            { icon: "", q: "'भारत अमुचा देश' या गीताचा मुख्य संदेश काय आहे?" },
+            { icon: "", q: "'चिव चिव चिमण्या' या पाठातून काय शिकायला मिळते?" },
+            { icon: "", q: "स्टीफन हॉकिंग यांच्या जीवनातून कोणती प्रेरणा मिळते?" },
+            { icon: "", q: "'ध्येयपूर्तीचा ध्यास' या पाठातून काय संदेश मिळतो?" },
         ],
     };
 
@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update Sample Questions in Sidebar
     function renderSampleQuestions(std) {
+        if (!sampleContainer) return;
         const questions = sampleQuestionsByStandard[std] || sampleQuestionsByStandard["6"] || [];
         sampleContainer.innerHTML = "";
 
@@ -202,10 +203,8 @@ document.addEventListener("DOMContentLoaded", () => {
     clearBtn.addEventListener("click", () => {
         const meta = standardTitles[currentStandard] || standardTitles["6"];
         chatMessages.innerHTML = `
-            <div class="welcome-card" id="welcome-card">
-                <div class="welcome-icon">🎓</div>
-                <h2>नवीन संवाद सुरू झाला आहे!</h2>
-                <p><strong>${meta.name}</strong> मधील कोणत्याही पाठाविषयी किंवा कवितेविषयी प्रश्न विचारा.</p>
+            <div class="empty-state" id="welcome-card">
+                <h1>Your smart AI Marathi Tutor for Maharashtra State Board</h1>
             </div>
         `;
     });
@@ -284,7 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const msgDiv = document.createElement("div");
         msgDiv.className = "message user";
         msgDiv.innerHTML = `
-            <div class="avatar">👤</div>
+            <div class="avatar">U</div>
             <div class="message-content">
                 <div class="std-chip">${escapeHtml(meta.name)}</div>
                 <div class="message-text">${escapeHtml(text)}</div>
@@ -298,10 +297,10 @@ document.addEventListener("DOMContentLoaded", () => {
         msgDiv.className = "message tutor";
         msgDiv.id = id;
         msgDiv.innerHTML = `
-            <div class="avatar">🎓</div>
+            <div class="avatar">T</div>
             <div class="message-content">
                 <div class="message-text">
-                    <em>📖 पाठ्यपुस्तकात माहिती शोधत आहे व उत्तर तयार करत आहे...</em>
+                    <em>पाठ्यपुस्तकात माहिती शोधत आहे व उत्तर तयार करत आहे...</em>
                 </div>
             </div>
         `;
@@ -319,14 +318,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const transliterationHtml = (data.marathi_question && data.marathi_question !== data.question)
             ? `<div class="transliteration-badge">
-                   <span class="badge-icon">🔤</span>
+                   <span class="badge-icon">T</span>
                    <span class="badge-label">मराठी रूपांतरण:</span>
                    <span class="badge-text">${escapeHtml(data.marathi_question)}</span>
                </div>`
             : "";
 
         msgDiv.innerHTML = `
-            <div class="avatar">🎓</div>
+            <div class="avatar">T</div>
             <div class="message-content">
                 ${transliterationHtml}
                 <div class="message-text">${parsedAnswer}</div>
@@ -338,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const msgDiv = document.getElementById(id);
         if (!msgDiv) return;
         msgDiv.innerHTML = `
-            <div class="avatar">⚠️</div>
+            <div class="avatar">!</div>
             <div class="message-content" style="border-color: #ef4444;">
                 <div class="message-text" style="color: #f87171;">
                     <strong>त्रुटी आली:</strong> ${escapeHtml(errorMessage)}
